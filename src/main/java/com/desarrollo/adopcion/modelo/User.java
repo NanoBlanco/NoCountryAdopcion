@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class User {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -35,6 +35,6 @@ public class Usuario {
 	@JoinTable(name="usuario_roles", 
 	joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"), 
 	inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
-	private Collection<Rol> roles = new HashSet<>();
+	private Collection<Role> roles = new HashSet<>();
 
 }

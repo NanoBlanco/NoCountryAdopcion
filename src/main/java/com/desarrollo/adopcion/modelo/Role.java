@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Rol {
+public class Role {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,26 +26,26 @@ public class Rol {
 	private String rol;
 	
 	@ManyToMany(mappedBy="roles")
-	private Collection<Usuario> usuarios = new HashSet<>();
+	private Collection<User> users = new HashSet<>();
 	
-	public void assignRolToUser(Usuario usr) {
+	public void assignRolToUser(User usr) {
 		usr.getRoles().add(this);
-		this.getUsuarios().add(usr);
+		this.getUsers().add(usr);
 	}
 	
-	public void removeUserFromRol(Usuario usr) {
+	public void removeUserFromRol(User usr) {
 		usr.getRoles().remove(this);
-		this.getUsuarios().remove(usr);
+		this.getUsers().remove(usr);
 	}
 	
 	public void removeAllUsersFromRol() {
-		if(this.getUsuarios()!=null) {
-			List<Usuario> rolUsuarios = this.getUsuarios().stream().toList();
+		if(this.getUsers()!=null) {
+			List<User> rolUsuarios = this.getUsers().stream().toList();
 			rolUsuarios.forEach(this :: removeUserFromRol);
 		}
 	}
 
-	public Rol(String rolName) {
+	public Role(String rolName) {
 		this.rol = rolName;
 	}
 
