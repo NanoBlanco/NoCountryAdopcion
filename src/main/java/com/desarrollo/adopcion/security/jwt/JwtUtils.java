@@ -1,23 +1,23 @@
 package com.desarrollo.adopcion.security.jwt;
 
-import java.security.Key;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import com.desarrollo.adopcion.security.user.UserDetailsSec;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+
+import com.desarrollo.adopcion.modelo.Role;
+
+import java.security.Key;
 
 @Component
 public class JwtUtils {
@@ -30,17 +30,32 @@ public class JwtUtils {
 	@Value("${auth.token.expirationInMills}")
 	private int jwtExpirationMs;
 	
+	
 	public String generateJwtTokenForUser(Authentication authentication) {
-		UserDetailsSec userPrincipal = (UserDetailsSec) authentication.getPrincipal();
-		List<String> roles = userPrincipal.getAuthorities()
-				.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+		UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
+		String role = userPrincipal.getAuthorities().toString();
+				
+		/*Role role = userPrincipal.getRole();*/
 		return Jwts.builder()
 				.setSubject(userPrincipal.getUsername())
-				.claim("roles",roles)
+				.claim("role",role)
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime()+jwtExpirationMs))
 				.signWith(key(), SignatureAlgorithm.HS256).compact();
 	}
+	/*
+	public String getToken(UserDetails user) {
+		return getToken(new HashMap<>(), user);
+	}
+	
+	private String getToken(Map<String, Object> extraClaims, UserDetails user) {
+		return Jwts.builder()
+				.setClaims(extraClaims)
+				.setSubject(user.getUsername())
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime()+jwtExpirationMs))
+				.signWith(key(), SignatureAlgorithm.HS256).compact();
+	}*/
 	
 	private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));

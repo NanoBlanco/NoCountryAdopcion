@@ -1,38 +1,35 @@
 package com.desarrollo.adopcion.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.desarrollo.adopcion.security.jwt.AuthTokenFilter;
+import com.desarrollo.adopcion.security.user.UserDetailService;
+import com.desarrollo.adopcion.security.jwt.JwtAuthTokenFilter;
 import com.desarrollo.adopcion.security.jwt.JwtAuthEntryPoint;
-import com.desarrollo.adopcion.security.user.UserDetailsSecService;
 
 import jakarta.servlet.DispatcherType;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled=true)
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 	
-	@Autowired
-	private UserDetailsSecService userDetailsService;
-	
-	@Autowired
-	private JwtAuthEntryPoint jwtAuthEntryPoint;
+	private final JwtAuthEntryPoint jwtAuthEntryPoint;
+	private final UserDetailService userDetailService;
 
 	@Bean
-    AuthTokenFilter authenticationTokenFilter() {
-		return new AuthTokenFilter();
+    JwtAuthTokenFilter authenticationTokenFilter() {
+		return new JwtAuthTokenFilter();
 	}
 
     @Bean
@@ -43,7 +40,7 @@ public class WebSecurityConfig {
     @Bean
     DaoAuthenticationProvider authenticationProvider() {
     	var authProvider = new DaoAuthenticationProvider();
-    	authProvider.setUserDetailsService(userDetailsService);
+    	authProvider.setUserDetailsService(userDetailService);
     	authProvider.setPasswordEncoder(passwordEncoder());
     	return authProvider;
     }

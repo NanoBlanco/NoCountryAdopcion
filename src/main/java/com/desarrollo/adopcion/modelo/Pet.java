@@ -1,6 +1,7 @@
 package com.desarrollo.adopcion.modelo;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -11,6 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,15 +46,16 @@ public class Pet {
 	
 	private String descripcion;
 	
-	private LocalDate creadoEn;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date creadoEn;
 	
 	@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PetPhotos> photos;
 	
 	@OneToMany(mappedBy = "pet1", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Match> match1;
+	private List<Coincidencia> match1;
 	
 	@OneToMany(mappedBy = "pet2", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Match> match2;
+	private List<Coincidencia> match2;
 
 }

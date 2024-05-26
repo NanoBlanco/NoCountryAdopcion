@@ -1,6 +1,7 @@
 package com.desarrollo.adopcion.modelo;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +27,7 @@ public class Message {
 	
 	@ManyToOne
 	@JoinColumn(name="match_id")
-	private Match match;
+	private Coincidencia match;
 	
 	@ManyToOne
 	@JoinColumn(name="sender_id")
@@ -32,6 +35,7 @@ public class Message {
 	
 	private String message;
 	
-	private LocalDate send_date;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date send_date;
 
 }

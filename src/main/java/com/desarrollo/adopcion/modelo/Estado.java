@@ -1,7 +1,7 @@
 package com.desarrollo.adopcion.modelo;
 
-public enum Role {
-	ADMIN,
-	USER
-	
+public enum Estado {
+	ACTIVO,
+	INACTIVO
+
 }
