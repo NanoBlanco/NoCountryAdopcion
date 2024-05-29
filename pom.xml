@@ -94,12 +94,6 @@
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>com.example</groupId>
-			<artifactId>ejemplo</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
