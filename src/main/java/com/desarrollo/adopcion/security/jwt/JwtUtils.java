@@ -35,7 +35,6 @@ public class JwtUtils {
 		UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 		String role = userPrincipal.getAuthorities().toString();
 				
-		/*Role role = userPrincipal.getRole();*/
 		return Jwts.builder()
 				.setSubject(userPrincipal.getUsername())
 				.claim("role",role)
@@ -43,20 +42,7 @@ public class JwtUtils {
 				.setExpiration(new Date((new Date()).getTime()+jwtExpirationMs))
 				.signWith(key(), SignatureAlgorithm.HS256).compact();
 	}
-	/*
-	public String getToken(UserDetails user) {
-		return getToken(new HashMap<>(), user);
-	}
-	
-	private String getToken(Map<String, Object> extraClaims, UserDetails user) {
-		return Jwts.builder()
-				.setClaims(extraClaims)
-				.setSubject(user.getUsername())
-				.setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime()+jwtExpirationMs))
-				.signWith(key(), SignatureAlgorithm.HS256).compact();
-	}*/
-	
+		
 	private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }

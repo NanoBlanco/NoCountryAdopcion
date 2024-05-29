@@ -60,7 +60,7 @@ public class WebSecurityConfig {
     	.authorizeHttpRequests(auth -> auth
     			.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
     			.requestMatchers("/","/auth/**").permitAll()
-    			.requestMatchers("/api/roles/**").hasRole("ADMIN").anyRequest().authenticated()
+    			.anyRequest().authenticated()
     			);
     	http.authenticationProvider(authenticationProvider());
     	http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
