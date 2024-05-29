@@ -8,11 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.desarrollo.adopcion.modelo.User;
 import com.desarrollo.adopcion.service.IUserService;
+import com.desarrollo.adopcion.service.UserService;
+
+import jakarta.mail.MessagingException;
+
+import com.desarrollo.adopcion.Correo.ForgotPasswordRequest;
 import com.desarrollo.adopcion.exception.UserException;
 
 @RestController
@@ -20,17 +27,20 @@ import com.desarrollo.adopcion.exception.UserException;
 public class UserController {
 	
 	@Autowired
-	private IUserService userService;
+	private IUserService IuserService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping("/todos")
 	public ResponseEntity<List<User>> getAllUsers(){
-		return new ResponseEntity<>(userService.getUsers(),HttpStatus.FOUND);
+		return new ResponseEntity<>(IuserService.getUsers(),HttpStatus.FOUND);
 	}
 	
 	@GetMapping("/{correo}")
 	public ResponseEntity<?> getUserByEmail(@PathVariable("correo") String correo) {
 		try {
-			User user = userService.getUserByCorreo(correo);
+			User user = IuserService.getUserByCorreo(correo);
 			return ResponseEntity.ok(user);
 		}catch(UserException ex){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -42,13 +52,19 @@ public class UserController {
 	@DeleteMapping("/eliminar/{correo}")
 	public ResponseEntity<String> deleteUser(@PathVariable String correo) {
 		try {
-			userService.deleteUser(correo);
+			IuserService.deleteUser(correo);
 			return ResponseEntity.ok("Usuario Eliminado con exito");
 		}catch(UserException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error eliminando el usuario");
 		}
+	}
+	
+	@PostMapping("/recuperar-clave")
+	public ResponseEntity<String> olvidoClave(@RequestBody ForgotPasswordRequest request) throws MessagingException {
+		userService.procesoOlvidoClave(request.getCorreo());
+		return ResponseEntity.ok("Se ha enviado un enlace de recuperación a tu correo");
 	}
 
 }
