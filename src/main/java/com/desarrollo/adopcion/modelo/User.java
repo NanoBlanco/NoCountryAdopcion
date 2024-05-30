@@ -50,10 +50,12 @@ public class User implements UserDetails{
 	private Date creadoEn;
 	
 	@Enumerated(EnumType.STRING)
-	private Estado estado;
+	@Builder.Default
+	private Estado estado = Estado.ACTIVO;
 	
 	@Enumerated(EnumType.STRING)
-	private Role role;
+	@Builder.Default
+	private Role role = Role.USER;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Pet> pet;

@@ -37,8 +37,8 @@ public class UserService implements IUserService {
 			throw new UserException(user.getCorreo()+" ya está registrado!");
 		}
 		user.setClave(passwordEncoder.encode(user.getClave()));
-		user.setEstado(Estado.ACTIVO);
-		user.setRole(Role.USER);
+		/*user.setEstado(Estado.ACTIVO);
+		user.setRole(Role.USER);*/
 		return userRepository.save(user);
 	}
 
@@ -60,9 +60,9 @@ public class UserService implements IUserService {
 	@Override
 	public User getUserByCorreo(String correo) {
 		System.out.println("Correo "+correo);
-		return userRepository.findByCorreo(correo).orElseThrow(()->new UserException("Usuario No encontrado..."));
+		return userRepository.findByCorreo(correo).orElseThrow();
 	}
-
+	
 	public void procesoOlvidoClave(String correo) throws MessagingException {
 
 		if (userRepository.existsByCorreo(correo)) {

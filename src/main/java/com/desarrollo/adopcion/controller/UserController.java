@@ -8,18 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.desarrollo.adopcion.modelo.User;
 import com.desarrollo.adopcion.service.IUserService;
-import com.desarrollo.adopcion.service.UserService;
 
-import jakarta.mail.MessagingException;
-
-import com.desarrollo.adopcion.Correo.ForgotPasswordRequest;
 import com.desarrollo.adopcion.exception.UserException;
 
 @RestController
@@ -29,8 +23,6 @@ public class UserController {
 	@Autowired
 	private IUserService IuserService;
 	
-	@Autowired
-	private UserService userService;
 	
 	@GetMapping("/todos")
 	public ResponseEntity<List<User>> getAllUsers(){
@@ -61,10 +53,4 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/recuperar-clave")
-	public ResponseEntity<String> olvidoClave(@RequestBody ForgotPasswordRequest request) throws MessagingException {
-		userService.procesoOlvidoClave(request.getCorreo());
-		return ResponseEntity.ok("Se ha enviado un enlace de recuperación a tu correo");
-	}
-
 }

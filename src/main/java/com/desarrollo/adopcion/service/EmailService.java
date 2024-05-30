@@ -16,7 +16,7 @@ public class EmailService {
 	
 	public void sendEmail(String correo, String token) throws MessagingException {
 		
-		String url = "http://localhost:9192/api/auth/reset-password?token=" + token;
+		String url = "http://localhost:9192/api/auth/recuperar-clave?token=" + token;
         
 		MimeMessage message = mailSender.createMimeMessage();
 		
